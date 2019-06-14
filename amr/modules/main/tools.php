@@ -191,3 +191,16 @@ function getLocalPath($path, $baseFolder = "/amr")
 	}
 	return false;
 }
+
+function htmlspecialcharsEx($str)
+{
+	static $search =  array("&amp;",     "&lt;",     "&gt;",     "&quot;",     "&#34;",     "&#x22;",     "&#39;",     "&#x27;",     "<",    ">",    "\"");
+	static $replace = array("&amp;amp;", "&amp;lt;", "&amp;gt;", "&amp;quot;", "&amp;#34;", "&amp;#x22;", "&amp;#39;", "&amp;#x27;", "&lt;", "&gt;", "&quot;");
+	return str_replace($search, $replace, $str);
+}
+
+function htmlspecialcharsbx($string, $flags = ENT_COMPAT, $doubleEncode = true)
+{
+	//function for php 5.4 where default encoding is UTF-8
+	return htmlspecialchars($string, $flags, (defined("BX_UTF")? "UTF-8" : "ISO-8859-1"), $doubleEncode);
+}
