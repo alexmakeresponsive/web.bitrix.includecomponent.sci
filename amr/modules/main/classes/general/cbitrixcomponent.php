@@ -728,7 +728,7 @@ class CBitrixComponent
 		// 	$page->giveNegativeComponentVote($this->__name);
 		// }
 
-		var_dump($result);die('result?');
+		// var_dump($result);die('result?');
 		return $result;
 	}
 	/**

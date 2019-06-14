@@ -9,6 +9,7 @@
 namespace Amr\Main\Classes\General;
 
 use Amr\Main\Lib\Type\Collection;
+use Amr\Main\Lib\Localization\Loc;
 
 global $arBXAvailableTemplateEngines;
 global $arBXRuntimeTemplateEngines;
@@ -444,7 +445,7 @@ class CBitrixComponentTemplate
 		if (strlen($this->__page) <= 0)
 			$this->__page = "template";
 
-		var_dump($customTemplatePath);die;
+		// var_dump($customTemplatePath);die;
 		if (!$this->__SearchTemplate($customTemplatePath))
 			return false;
 
@@ -480,10 +481,20 @@ class CBitrixComponentTemplate
 	{
 		global $arBXRuntimeTemplateEngines;
 
-		if (!$arBXRuntimeTemplateEngines)
+		// die('__SearchTemplateFile?');
+		// var_dump($arBXRuntimeTemplateEngines);die;
+
+		if (!$arBXRuntimeTemplateEngines) {
+			// die('init');
 			$this->InitTemplateEngines();
+		}
+		// die('next?');
+
+
 
 		$filePath = $_SERVER["DOCUMENT_ROOT"].$path."/".$fileName.".php";
+		// var_dump($filePath); // string(157) "/Volumes/data/work/software/web/code/backend/php/packages/cms/snippet/bitrix/includecomponent/v.3/local/templates/twbs4_1/components/amr/menu/bottom_menu.php"
+
 		if (count($arBXRuntimeTemplateEngines) === 1 && file_exists($filePath) && is_file($filePath))
 		{
 			return $fileName.".php";
@@ -493,6 +504,8 @@ class CBitrixComponentTemplate
 			foreach ($arBXRuntimeTemplateEngines as $templateExt => $engineID)
 			{
 				$filePath = $_SERVER["DOCUMENT_ROOT"].$path."/".$fileName.".".$templateExt;
+				// var_dump($filePath);
+				// die;
 				if (file_exists($filePath) && is_file($filePath))
 				{
 					return $fileName.".".$templateExt;
@@ -728,7 +741,7 @@ class CBitrixComponentTemplate
 		&$arResult, &$arParams, $parentTemplateFolder = "")
 	{
 		/** @noinspection PhpUnusedLocalVariableInspection */
-		global $APPLICATION, $USER, $DB;
+		global $main;
 
 		if (!$this->__bInited)
 			return false;
@@ -745,6 +758,8 @@ class CBitrixComponentTemplate
 
 		$component = &$this->__component;
 
+		// var_dump($this->__fileAlt);die;
+
 		if ($this->__fileAlt <> '')
 		{
 			include($_SERVER["DOCUMENT_ROOT"].$this->__fileAlt);
@@ -753,8 +768,10 @@ class CBitrixComponentTemplate
 
 		$templateData = false;
 
+		// var_dump($this->__file);die;
 		include($_SERVER["DOCUMENT_ROOT"].$this->__file);
 
+		// var_dump($this->frames);die;
 		for ($i = count($this->frames) - 1; $i >= 0; $i--)
 		{
 			$frame = $this->frames[$i];
@@ -764,6 +781,7 @@ class CBitrixComponentTemplate
 			}
 		}
 
+		// var_dump($this->getFrameMode());die;	//true
 		if (!$this->getFrameMode())
 		{
 			$page = \Bitrix\Main\Composite\Page::getInstance();
@@ -771,6 +789,8 @@ class CBitrixComponentTemplate
 		}
 
 		$component_epilog = $this->__folder."/component_epilog.php";
+		// var_dump($component_epilog);die;
+
 		if(file_exists($_SERVER["DOCUMENT_ROOT"].$component_epilog))
 		{
 			//These will be available with extract then component will
@@ -806,6 +826,7 @@ class CBitrixComponentTemplate
 		$externalEngine = ($arBXAvailableTemplateEngines[$this->__engineID]["function"] <> '' && function_exists($arBXAvailableTemplateEngines[$this->__engineID]["function"]));
 
 		$arParams = $this->__component->arParams;
+		// var_dump($externalEngine);die('externalEngine');	//false
 
 		if($this->__folder <> '')
 		{
@@ -815,6 +836,7 @@ class CBitrixComponentTemplate
 			}
 			else
 			{
+				// die('include?');
 				$this->IncludeLangFile();
 			}
 			$this->__IncludeMutatorFile($arResult, $arParams);
@@ -826,6 +848,9 @@ class CBitrixComponentTemplate
 
 		$parentTemplateFolder = "";
 		$parentComponent = $this->__component->GetParent();
+
+		// var_dump($parentComponent);die;
+
 		if ($parentComponent)
 		{
 			$parentTemplate = $parentComponent->GetTemplate();
@@ -848,6 +873,7 @@ class CBitrixComponentTemplate
 		}
 		else
 		{
+			// die('else?');
 			$result = $this->__IncludePHPTemplate($arResult, $arParams, $parentTemplateFolder);
 		}
 
@@ -875,21 +901,28 @@ class CBitrixComponentTemplate
 			}
 
 			$absPath = $_SERVER["DOCUMENT_ROOT"].$this->__folder."/".$relativePath;
+			// var_dump($absPath);die;
 
+			// var_dump($lang);die;
+			// $lang = 'ru';
 			if ($lang === false && $return === false)
 			{
-				\Bitrix\Main\Localization\Loc::loadMessages($absPath);
+				// die('if');
+				Loc::loadMessages($absPath);
 			}
 			else
 			{
+				// die('lese');
 				if ($lang === false)
 				{
 					$lang = $this->getLanguageId();
 				}
-				$arLangMessages = \Bitrix\Main\Localization\Loc::loadLanguageFile($absPath, $lang);
+				$arLangMessages = Loc::loadLanguageFile($absPath, $lang);
 			}
+			// die('endif');
 		}
 
+		// var_dump($arLangMessages);die;
 		return $arLangMessages;
 	}
 
@@ -921,8 +954,10 @@ class CBitrixComponentTemplate
 	 */
 	public function __IncludeCSSFile()
 	{
-		/** @global CMain $APPLICATION */
-		global $APPLICATION;
+		/** @global CMain $main */
+		global $main;
+
+		// var_dump($this->__component->__parent);die;
 
 		if ($this->__folder <> '')
 		{
@@ -931,7 +966,8 @@ class CBitrixComponentTemplate
 				|| file_exists($_SERVER["DOCUMENT_ROOT"].$this->__folder."/style.css")
 			)
 			{
-				$APPLICATION->SetAdditionalCSS($this->__folder."/style.css");
+				// die('if?');
+				$main->SetAdditionalCSS($this->__folder."/style.css");
 
 				//Check if parent component exists and plug css it to it's "collection"
 				if ($this->__component && $this->__component->__parent)
@@ -1028,9 +1064,10 @@ class CBitrixComponentTemplate
 	public function EndViewTarget()
 	{
 		/** @global CMain $APPLICATION */
-		global $APPLICATION;
+		global $main;
 
 		$view = &$this->__view;
+		// var_dump($view);die('view');
 		if(!empty($view))
 		{
 			//Get the key to last started view target
