@@ -15,9 +15,11 @@ Loader::switchAutoLoad(true);
 Loader::registerNamespace('Amr\Main\Classes', 'main', 'classes' );
 Loader::registerNamespace('Amr\Main\Classes\General', 'main', 'classes/general' );
 Loader::registerNamespace('Amr\Main\Classes\Mysql', 'main', 'classes/mysql' );
+Loader::registerNamespace('Amr\Main\Classes\Tools', 'main', 'classes/tools' );
 Loader::registerNamespace('Amr\Main\Lib', 'main', 'lib' );
 Loader::registerNamespace('Amr\Main\Lib\Type', 'main', 'lib/type' );
 Loader::registerNamespace('Amr\Main\Lib\Config', 'main', 'lib/config' );
+Loader::registerNamespace('Amr\Main\Lib\Page', 'main', 'lib/page' );
 
 // var_dump(Loader::$customNamespaces);die;
 
