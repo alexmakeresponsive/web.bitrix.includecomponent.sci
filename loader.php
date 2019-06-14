@@ -425,8 +425,9 @@ final class Loader
             // var_dump(isset(self::$arLoadedModulesHolders[$module]));die;
 
 			if (!isset(self::$arLoadedModulesHolders[$module])) {
-				// var_dump($arLoadedModulesHolders[$module]);die;
-                echo "break?";die('380');
+				// var_dump($arLoadedModulesHolders[$module]);
+				var_dump($className);
+                die('380');
 				break;
             }
 
