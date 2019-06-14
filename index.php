@@ -21,6 +21,8 @@ Loader::registerNamespace('Amr\Main\Lib', 'main', 'lib' );
 Loader::registerNamespace('Amr\Main\Lib\Type', 'main', 'lib/type' );
 Loader::registerNamespace('Amr\Main\Lib\Config', 'main', 'lib/config' );
 Loader::registerNamespace('Amr\Main\Lib\Page', 'main', 'lib/page' );
+Loader::registerNamespace('Amr\Main\Lib\Localization', 'main', 'lib/localization' );
+Loader::registerNamespace('Amr\Main\Lib\Io', 'main', 'lib/io' );
 
 // var_dump(Loader::$customNamespaces);die;
 
