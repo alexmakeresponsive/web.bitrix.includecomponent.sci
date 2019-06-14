@@ -204,3 +204,23 @@ function htmlspecialcharsbx($string, $flags = ENT_COMPAT, $doubleEncode = true)
 	//function for php 5.4 where default encoding is UTF-8
 	return htmlspecialchars($string, $flags, (defined("BX_UTF")? "UTF-8" : "ISO-8859-1"), $doubleEncode);
 }
+
+/*
+This function emulates php internal function basename
+but does not behave badly on broken locale settings
+*/
+function bx_basename($path, $ext="")
+{
+	$path = rtrim($path, "\\/");
+	if(preg_match("#[^\\\\/]+$#", $path, $match))
+		$path = $match[0];
+
+	if($ext)
+	{
+		$ext_len = strlen($ext);
+		if(strlen($path) > $ext_len && substr($path, -$ext_len) == $ext)
+			$path = substr($path, 0, -$ext_len);
+	}
+
+	return $path;
+}
