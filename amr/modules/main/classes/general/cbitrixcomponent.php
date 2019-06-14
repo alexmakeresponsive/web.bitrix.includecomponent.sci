@@ -9,6 +9,9 @@
 namespace Amr\Main\Classes\General;
 
 use Amr\Main\Lib\Context;
+use Amr\Main\Lib\Localization\Loc;
+
+use Amr\Main\Classes\General\CBitrixComponentTemplate;
 
 class CBitrixComponent
 {
@@ -329,6 +332,7 @@ class CBitrixComponent
 	 */
 	final public function getTemplatePage()
 	{
+		// var_dump($this->__bInited);die;
 		if ($this->__bInited)
 			return $this->__templatePage;
 		else
@@ -590,15 +594,15 @@ class CBitrixComponent
 
 		$path = $_SERVER["DOCUMENT_ROOT"].$this->__path."/".$relativePath;
 
-		var_dump($path);die('path');
+		// var_dump($path);die('path');
 
 		if($lang === false)
 		{
-			\Bitrix\Main\Localization\Loc::loadMessages($path);
+			Loc::loadMessages($path);
 		}
 		else
 		{
-			\Bitrix\Main\Localization\Loc::loadLanguageFile($path, $lang);
+			Loc::loadLanguageFile($path, $lang);
 		}
 	}
 	/**
@@ -612,7 +616,7 @@ class CBitrixComponent
 	final protected function __includeComponent()
 	{
 		/** @noinspection PhpUnusedLocalVariableInspection */
-		global $APPLICATION, $USER, $DB;
+		global $main;
 
 		if (!$this->__bInited)
 			return null;
@@ -624,6 +628,8 @@ class CBitrixComponent
 		$componentPath = $this->__path;
 		$componentName = $this->__name;
 		$componentTemplate = $this->getTemplateName();
+
+		// var_dump($componentTemplate);die('componentTemplate');
 
 		if ($this->__parent)
 		{
@@ -677,9 +683,10 @@ class CBitrixComponent
 		{
 			/** @var CBitrixComponent $component  */
 			$component = new $this->classOfComponent($this);
-			// var_dump($component);die(component);
+			// var_dump($component);die('new component');
+			// var_dump($component->__name);die('component name');
 			$component->onIncludeComponentLang();
-			die;
+			// die('onIncludeComponentLang?');
 
 			$keysToExport = $component->listKeysSignedParameters();
 			if($keysToExport)
@@ -690,14 +697,14 @@ class CBitrixComponent
 			$component->arParams = $component->onPrepareComponentParams($arParams);
 			$component->__prepareComponentParams($component->arParams);
 
-			$componentFrame = new \Bitrix\Main\Composite\Internals\AutomaticArea($component);
-			$componentFrame->start();
-
+			// $componentFrame = new \Bitrix\Main\Composite\Internals\AutomaticArea($component);
+			// $componentFrame->start();
+			//
 			$result = $component->executeComponent();
-			$this->__arIncludeAreaIcons = $component->__arIncludeAreaIcons;
-			$frameMode = $component->getFrameMode();
-
-			$componentFrame->end();
+			// $this->__arIncludeAreaIcons = $component->__arIncludeAreaIcons;
+			// $frameMode = $component->getFrameMode();
+			//
+			// $componentFrame->end();
 		}
 		else
 		{
@@ -714,12 +721,14 @@ class CBitrixComponent
 			$componentFrame->end();
 		}
 
-		if (!$frameMode)
-		{
-			$page = \Bitrix\Main\Composite\Page::getInstance();
-			$page->giveNegativeComponentVote($this->__name);
-		}
+		// var_dump($frameMode);die('frameMode');
+		// if (!$frameMode)
+		// {
+		// 	$page = \Bitrix\Main\Composite\Page::getInstance();
+		// 	$page->giveNegativeComponentVote($this->__name);
+		// }
 
+		var_dump($result);die('result?');
 		return $result;
 	}
 	/**
@@ -733,17 +742,20 @@ class CBitrixComponent
 	 */
 	final public function includeComponentTemplate($templatePage = "", $customTemplatePath = "")
 	{
+		// die('next?');
 		if (!$this->__bInited)
 			return null;
 
 		if ($this->initComponentTemplate($templatePage, $this->getSiteTemplateId(), $customTemplatePath))
 		{
+			// die('if?');
 			$this->showComponentTemplate();
 			if($this->__component_epilog)
 				$this->includeComponentEpilog($this->__component_epilog);
 		}
 		else
 		{
+			// die('else?');
 			$this->abortResultCache();
 			$this->__showError(str_replace(
 				array("#PAGE#", "#NAME#"),
@@ -751,6 +763,7 @@ class CBitrixComponent
 				"Cannot find '#NAME#' template with page '#PAGE#'"
 			));
 		}
+		// die('end');
 	}
 	/**
 	 * Function initializes the template of the component. Returns true on success.
@@ -770,12 +783,17 @@ class CBitrixComponent
 
 		$this->__templatePage = $templatePage;
 
+		// die('before new CBitrixComponentTemplate');
 		$this->__template = new CBitrixComponentTemplate();
+		// die('after new CBitrixComponentTemplate');
 		$this->__template->setLanguageId($this->getLanguageId());
+		// die('next?');
 		if ($this->__template->Init($this, $siteTemplate, $customTemplatePath))
 			return true;
 		else
 			return false;
+
+
 	}
 	/**
 	 * Function executes initialized template of the component.

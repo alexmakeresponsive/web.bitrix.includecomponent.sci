@@ -1020,7 +1020,7 @@ abstract class CAllMain
 				// var_dump($this->__componentStack);die;
 
 				$result = $component->IncludeComponent($componentTemplate, $arParams, $parentComponent);
-				var_dump($result);die;
+				var_dump($result);die('IncludeComponent result');
 
 
 				array_pop($this->__componentStack);
