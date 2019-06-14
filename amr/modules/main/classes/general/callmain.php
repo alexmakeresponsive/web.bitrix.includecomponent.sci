@@ -9,6 +9,8 @@
 namespace Amr\Main\Classes\General;
 
 use Amr\Main\Lib\Page\Asset;
+use Amr\Main\Classes\General\CComponentEngine;
+use Amr\Main\Classes\General\CBitrixComponent;
 
 // use Bitrix\Main;
 // use Bitrix\Main\Composite;
@@ -979,91 +981,47 @@ abstract class CAllMain
 	// COMPONENTS 2.0 >>>>>
 	public function IncludeComponent($componentName, $componentTemplate, $arParams = array(), $parentComponent = null, $arFunctionParams = array())
 	{
-		die('IncludeComponent?');
+		// die('IncludeComponent?');
 
-		/** @global CMain $APPLICATION */
-		global $APPLICATION, $USER;
-
-		if(is_array($this->arComponentMatch))
-		{
-			// die('sd');
-			$skipComponent = true;
-			foreach($this->arComponentMatch as $cValue)
-			{
-				if(strpos($componentName, $cValue) !== false)
-				{
-					$skipComponent = false;
-					break;
-				}
-			}
-			if($skipComponent)
-				return false;
-		}
+		/** @global CMain $main */
+		global $main;
 
 		$componentRelativePath = CComponentEngine::MakeComponentPath($componentName);
-		if ($componentName === 'bitrix:menu') {
-			// s($componentRelativePath);die;	// /bitrix/menu
-		}
+		// var_dump($componentRelativePath);die;	// amr/menu
 
-		if (StrLen($componentRelativePath) <= 0)
-			return False;
-
-		$debug = null;
-		// die('dfv');
-		$bShowDebug = $_SESSION["SESS_SHOW_INCLUDE_TIME_EXEC"]=="Y"
-			&& (
-				$USER->CanDoOperation('edit_php')
-				|| $_SESSION["SHOW_SQL_STAT"]=="Y"
-			)
-			&& !defined("PUBLIC_AJAX_MODE")
-		;
-		if($bShowDebug || $APPLICATION->ShowIncludeStat)
-		{
-			$debug = new CDebugInfo();
-			$debug->Start($componentName);
-		}
-
+		// var_dump($parentComponent);die;
 		if (is_object($parentComponent))
 		{
 			if (!($parentComponent instanceof cbitrixcomponent))
 				$parentComponent = null;
 		}
 
-		$bDrawIcons = ((!isset($arFunctionParams["HIDE_ICONS"]) || $arFunctionParams["HIDE_ICONS"] <> "Y") && $APPLICATION->GetShowIncludeAreas());
-		// s($bDrawIcons);die;	//false
-
-		// s($this);die;	//CMain
+		$bDrawIcons = ((!isset($arFunctionParams["HIDE_ICONS"]) || $arFunctionParams["HIDE_ICONS"] <> "Y") && $main->GetShowIncludeAreas());
+		// var_dump($bDrawIcons);die;	//false
 
 		if($bDrawIcons)
 			echo $this->IncludeStringBefore();
 
+		// die('next?');
 		$result = null;
 		$bComponentEnabled = (!isset($arFunctionParams["ACTIVE_COMPONENT"]) || $arFunctionParams["ACTIVE_COMPONENT"] <> "N");
-		// s($bComponentEnabled);die;	//true
+		// var_dump($bComponentEnabled);die;	//true
 
 		$component = new CBitrixComponent();
-		// s($component);die;
+		// var_dump($component);die;
 
-		// s(\Bitrix\Main\Context::getCurrent());die;
-		// s(\Bitrix\Main\Context::getCurrent()->getRequest());die;
-
-		// s($component->InitComponent($componentName));die;	//true
+		// var_dump($component->InitComponent($componentName));die;	//true
 		if($component->InitComponent($componentName))
 		{
 			$obAjax = null;
 			if($bComponentEnabled)
 			{
-				// s($arParams['AJAX_MODE'] );die;	//null
-				if($arParams['AJAX_MODE'] == 'Y')
-					$obAjax = new CComponentAjax($componentName, $componentTemplate, $arParams, $parentComponent);
-
 				$this->__componentStack[] = $component;
-				// s($this->__componentStack);die;
+				// var_dump($this->__componentStack);die;
 
-				// s($component);die;
 				$result = $component->IncludeComponent($componentTemplate, $arParams, $parentComponent);
-				// s($result);die;	// 1
-				// s($component);die;
+				var_dump($result);die;
+
 
 				array_pop($this->__componentStack);
 			}
