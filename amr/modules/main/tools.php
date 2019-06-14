@@ -170,3 +170,24 @@ function _normalizePath($strPath)
 	}
 	return $strResult;
 }
+
+function getLocalPath($path, $baseFolder = "/amr")
+{
+	$root = rtrim($_SERVER["DOCUMENT_ROOT"], "\\/");
+
+	static $hasLocalDir = null;
+	if($hasLocalDir === null)
+	{
+		$hasLocalDir = is_dir($root."/local");
+	}
+
+	if($hasLocalDir && file_exists($root."/local/".$path))
+	{
+		return "/local/".$path;
+	}
+	elseif(file_exists($root.$baseFolder."/".$path))
+	{
+		return $baseFolder."/".$path;
+	}
+	return false;
+}
