@@ -7,6 +7,9 @@
  */
 namespace Amr\Main\Lib;
 
+use Amr\Main\Lib\Data\ManagedCache;
+use Amr\Main\Lib\Data\TaggedCache;
+
 /**
  * Base class for any application.
  */
@@ -406,7 +409,7 @@ abstract class Application
 	{
 		if ($this->managedCache == null)
 		{
-			// $this->managedCache = new Data\ManagedCache();
+			$this->managedCache = new ManagedCache();
 		}
 
 		return $this->managedCache;
@@ -421,7 +424,7 @@ abstract class Application
 	{
 		if ($this->taggedCache == null)
 		{
-			$this->taggedCache = new Data\TaggedCache();
+			$this->taggedCache = new TaggedCache();
 		}
 
 		return $this->taggedCache;
@@ -489,14 +492,17 @@ abstract class Application
 			return $personalRoot;
 
 		$context = Application::getInstance()->getContext();
+		// var_dump($context);die;
 		if ($context != null)
 		{
 			$server = $context->getServer();
+			// var_dump($server);die;	//object(Amr\Main\Lib\Server)#3
 			if ($server != null)
+				// var_dump($server->getPersonalRoot());die;
 				return $personalRoot = $server->getPersonalRoot();
 		}
 
-		return isset($_SERVER["BX_PERSONAL_ROOT"]) ? $_SERVER["BX_PERSONAL_ROOT"] : "/bitrix";
+		return isset($_SERVER["BX_PERSONAL_ROOT"]) ? $_SERVER["BX_PERSONAL_ROOT"] : "/amr";
 	}
 
 	/**
