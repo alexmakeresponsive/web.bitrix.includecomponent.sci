@@ -8,8 +8,10 @@
 
 namespace Amr\Main\Classes\General;
 
+use Amr\Main\Lib\Data\Cache;
 use Amr\Main\Lib\Context;
 use Amr\Main\Lib\Localization\Loc;
+use Amr\Main\Classes\General\COption;
 
 use Amr\Main\Classes\General\CBitrixComponentTemplate;
 
@@ -923,8 +925,9 @@ class CBitrixComponent
 	 */
 	final public function startResultCache($cacheTime = false, $additionalCacheID = false, $cachePath = false)
 	{
+		// die('startResultCache');
 		/** @global CMain $APPLICATION */
-		global $APPLICATION, $CACHE_MANAGER;
+		global $main, $CACHE_MANAGER;
 
 		if (!$this->__bInited)
 			return null;
@@ -935,12 +938,21 @@ class CBitrixComponent
 		if ($cacheTime === false)
 			$cacheTime = intval($this->arParams["CACHE_TIME"]);
 
+		// die('next');
 		$this->__cacheID = $this->getCacheID($additionalCacheID);
+		// die('after getCacheID');
 		$this->__cachePath = $cachePath;
+		// var_dump($this->__cachePath);die;
+
 		if ($this->__cachePath === false)
 			$this->__cachePath = $CACHE_MANAGER->getCompCachePath($this->__relativePath);
 
-		$this->__cache = \Bitrix\Main\Data\Cache::createInstance();
+		// var_dump($this->__cachePath);die;	// string(16) "/s1/amr/menu/d41"
+
+		$this->__cache = Cache::createInstance();
+		// echo "<pre>";
+		// var_dump($this->__cache);die;
+
 		if ($this->__cache->startDataCache($cacheTime, $this->__cacheID, $this->__cachePath))
 		{
 			$this->__NavNum = $GLOBALS["NavNum"];
