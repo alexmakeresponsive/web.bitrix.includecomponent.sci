@@ -47,7 +47,7 @@ class Server
 	{
 		$r = $this->get("BX_PERSONAL_ROOT");
 		if ($r == null || $r == "")
-			$r = "/bitrix";
+			$r = "/amr";
 
 		return $r;
 	}
