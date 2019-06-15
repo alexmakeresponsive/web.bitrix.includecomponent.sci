@@ -23,6 +23,7 @@ Loader::registerNamespace('Amr\Main\Lib\Config', 'main', 'lib/config' );
 Loader::registerNamespace('Amr\Main\Lib\Page', 'main', 'lib/page' );
 Loader::registerNamespace('Amr\Main\Lib\Localization', 'main', 'lib/localization' );
 Loader::registerNamespace('Amr\Main\Lib\Io', 'main', 'lib/io' );
+Loader::registerNamespace('Amr\Main\Lib\Data', 'main', 'lib/data' );
 
 // var_dump(Loader::$customNamespaces);die;
 
@@ -41,6 +42,10 @@ $app            ->initializeExtendedKernel(array(
             // ->initializeContext($params);
 
 $main           =new Amr\Main\Classes\Mysql\CMain;
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/amr/modules/main/classes/general/cache.php';
+
+
 $main          ->IncludeComponent(
                         "amr:menu",
                         "bottom_menu",
