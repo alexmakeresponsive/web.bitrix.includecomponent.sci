@@ -38,13 +38,17 @@ class CBitrixMenuComponent extends CBitrixComponent
 			;
 
 			if($this->arParams["MENU_CACHE_USE_GROUPS"] === "Y")
-				$strCacheID .= ":".$USER->GetGroups();
+				// $strCacheID .= ":". $USER->GetGroups();
+				$strCacheID .= ":".'2';
 
+			// var_dump($this->arParams["MENU_CACHE_USE_USERS"]);die;	// null
 			if($this->arParams["MENU_CACHE_USE_USERS"] === "Y")
 				$strCacheID .= ":".$USER->GetID();
 
+			// var_dump($this->arParams["MENU_CACHE_GET_VARS"]);die;	//array(0) { }
 			if(is_array($this->arParams["MENU_CACHE_GET_VARS"]))
 			{
+				// die('if');
 				foreach($this->arParams["MENU_CACHE_GET_VARS"] as $name)
 				{
 					$name = trim($name);
@@ -54,6 +58,7 @@ class CBitrixMenuComponent extends CBitrixComponent
 			}
 
 			$strCacheID = md5($strCacheID);
+			// var_dump($strCacheID);die;	// string(32) "c65a8e2ca14d56e9b10d9f7168911960"
 		}
 
 		return $strCacheID;

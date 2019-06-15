@@ -47,72 +47,72 @@ $arParams["CACHE_SELECTED_ITEMS"] = ($arParams["CACHE_SELECTED_ITEMS"] <> "N" &&
 $curDir = $main->GetCurDir();
 // var_dump($curDir);die('curDir');
 
-// if($this->startResultCache(false, false, ($arParams["MENU_CACHE_USE_USERS"] === "Y"? $this->getGenerationCachePath($USER->GetID()): false)))
-// {
-// 	// die('if?');
-//
-// 	if(defined("BX_COMP_MANAGED_CACHE"))
-// 		$CACHE_MANAGER->registerTag("bitrix:menu");
-// 	//Read root menu
-// 	$menu = new CMenu($arParams["ROOT_MENU_TYPE"]);
-// 	$menu->Init($curDir, $arParams["USE_EXT"], $componentPath."/stub.php");
-//
-// 	$menu->RecalcMenu($arParams["ALLOW_MULTI_SELECT"], $arParams["CACHE_SELECTED_ITEMS"]);
-//
-// 	$arResult = array();
-//
-// 	//Read child menu recursive
-// 	if ($arParams["MAX_LEVEL"] > 1)
-// 	{
-// 		$this->getChildMenuRecursive(
-// 			$menu->arMenu,
-// 			$arResult,
-// 			$arParams["CHILD_MENU_TYPE"],
-// 			$arParams["USE_EXT"],
-// 			$menu->template,
-// 			$currentLevel = 1,
-// 			$arParams["MAX_LEVEL"],
-// 			$arParams["ALLOW_MULTI_SELECT"],
-// 			$arParams["CACHE_SELECTED_ITEMS"],
-// 			false
-// 		);
-//
-// 		if($arParams["SHOW_LAST_LEVEL_BUTTONS"]!="Y")
-// 		{
-// 			$arResult["menuDir"] = $menu->MenuDir;
-// 			$arResult["menuType"] = $menu->type;
-// 		}
-// 		else
-// 		{
-// 			$arResult["initMenuDir"] = $menu->MenuDir;
-// 			$arResult["initMenuType"] = $menu->type;
-// 		}
-// 	}
-// 	else
-// 	{
-// 		$arResult = $menu->arMenu;
-// 		$arResult["menuDir"] = $menu->MenuDir;
-// 		$arResult["menuType"] = $menu->type;
-// 		for ($menuIndex = 0, $menuCount = count($menu->arMenu); $menuIndex < $menuCount; $menuIndex++)
-// 		{
-// 			//Menu from iblock (bitrix:menu.sections)
-// 			if (is_array($arResult[$menuIndex]["PARAMS"]) && isset($arResult[$menuIndex]["PARAMS"]["FROM_IBLOCK"]))
-// 			{
-// 				$arResult[$menuIndex]["DEPTH_LEVEL"] = $arResult[$menuIndex]["PARAMS"]["DEPTH_LEVEL"];
-// 				$arResult[$menuIndex]["IS_PARENT"] = $arResult[$menuIndex]["PARAMS"]["IS_PARENT"];
-// 			}
-// 			else
-// 			{
-// 				//Menu from files
-// 				$arResult[$menuIndex]["DEPTH_LEVEL"] = 1;
-// 				$arResult[$menuIndex]["IS_PARENT"] = false;
-// 			}
-// 		}
-// 	}
-//
-// 	unset($menu->arMenu);
-// 	$this->endResultCache();
-// }
+if($this->startResultCache(false, false, ($arParams["MENU_CACHE_USE_USERS"] === "Y"? $this->getGenerationCachePath($USER->GetID()): false)))
+{
+	// die('if?');
+
+	if(defined("BX_COMP_MANAGED_CACHE"))
+		$CACHE_MANAGER->registerTag("bitrix:menu");
+	//Read root menu
+	$menu = new CMenu($arParams["ROOT_MENU_TYPE"]);
+	$menu->Init($curDir, $arParams["USE_EXT"], $componentPath."/stub.php");
+
+	$menu->RecalcMenu($arParams["ALLOW_MULTI_SELECT"], $arParams["CACHE_SELECTED_ITEMS"]);
+
+	$arResult = array();
+
+	//Read child menu recursive
+	if ($arParams["MAX_LEVEL"] > 1)
+	{
+		$this->getChildMenuRecursive(
+			$menu->arMenu,
+			$arResult,
+			$arParams["CHILD_MENU_TYPE"],
+			$arParams["USE_EXT"],
+			$menu->template,
+			$currentLevel = 1,
+			$arParams["MAX_LEVEL"],
+			$arParams["ALLOW_MULTI_SELECT"],
+			$arParams["CACHE_SELECTED_ITEMS"],
+			false
+		);
+
+		if($arParams["SHOW_LAST_LEVEL_BUTTONS"]!="Y")
+		{
+			$arResult["menuDir"] = $menu->MenuDir;
+			$arResult["menuType"] = $menu->type;
+		}
+		else
+		{
+			$arResult["initMenuDir"] = $menu->MenuDir;
+			$arResult["initMenuType"] = $menu->type;
+		}
+	}
+	else
+	{
+		$arResult = $menu->arMenu;
+		$arResult["menuDir"] = $menu->MenuDir;
+		$arResult["menuType"] = $menu->type;
+		for ($menuIndex = 0, $menuCount = count($menu->arMenu); $menuIndex < $menuCount; $menuIndex++)
+		{
+			//Menu from iblock (bitrix:menu.sections)
+			if (is_array($arResult[$menuIndex]["PARAMS"]) && isset($arResult[$menuIndex]["PARAMS"]["FROM_IBLOCK"]))
+			{
+				$arResult[$menuIndex]["DEPTH_LEVEL"] = $arResult[$menuIndex]["PARAMS"]["DEPTH_LEVEL"];
+				$arResult[$menuIndex]["IS_PARENT"] = $arResult[$menuIndex]["PARAMS"]["IS_PARENT"];
+			}
+			else
+			{
+				//Menu from files
+				$arResult[$menuIndex]["DEPTH_LEVEL"] = 1;
+				$arResult[$menuIndex]["IS_PARENT"] = false;
+			}
+		}
+	}
+
+	unset($menu->arMenu);
+	$this->endResultCache();
+}
 
 // die('next?');
 
